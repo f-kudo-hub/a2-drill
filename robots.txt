@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://f-kudo-hub.github.io/a2-drill/sitemap.xml
