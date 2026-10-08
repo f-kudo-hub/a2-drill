@@ -13,7 +13,7 @@ function speak(lines,btn){var lab=btn.querySelector('.l'),dot=btn.querySelector(
  (function nx(){if(k>=lines.length){reset();return}var a=lines[k++],u=new SpeechSynthesisUtterance(a.ja);u.lang='ja-JP';if(v)u.voice=v;u.rate=0.9;u.pitch=a.who==='M'?0.8:a.who==='F'?1.2:1;u.onend=function(){setTimeout(nx,450)};u.onerror=reset;speechSynthesis.speak(u)})()}
 function intro(){var by={};Q.forEach(function(q){by[q.s]=(by[q.s]||0)+1});
  root.innerHTML='<div class="ticket"><div class="body"><h2>'+esc(P.start)+'</h2><p>'+esc(P.minutes)+'</p></div><div class="stub"><span class="n">'+Q.length+'</span><span class="u" lang="ja">問</span></div></div>'+
- '<p>'+esc(T.mockIntro)+'</p><div class="card lines">'+Object.keys(by).map(function(s){return '<div class="line"><span class="tag s'+CODE[s]+'">'+LET[s]+'</span><span class="grow">'+esc(T.sections[s])+'</span><b class="disp">'+by[s]+'</b></div>'}).join('')+'</div>'+
+ '<p>'+esc(T.mockIntro)+'</p><div class="lines">'+Object.keys(by).map(function(s){return '<div class="line r'+CODE[s]+'"><span class="tag s'+CODE[s]+'">'+LET[s]+'</span><span class="grow">'+esc(T.sections[s])+'</span><b class="disp">'+by[s]+'</b></div>'}).join('')+'</div>'+
  '<button class="btn" id="go">'+esc(P.start)+'</button><p class="note">'+esc(P.voice)+'</p>';
  document.getElementById('go').onclick=function(){i=0;picks={};show()}}
 function show(){var q=Q[i],ins=I[q.type]||{};var picked=picks[q.id],c=CODE[q.s];
@@ -29,7 +29,7 @@ function show(){var q=Q[i],ins=I[q.type]||{};var picked=picks[q.id],c=CODE[q.s];
  var nb=document.getElementById('next');if(nb)nb.onclick=function(){if('speechSynthesis' in window)speechSynthesis.cancel();i++;if(i<Q.length){show();window.scrollTo(0,root.offsetTop-8)}else done()}}
 function done(){var by={},c=0;Q.forEach(function(q){by[q.s]=by[q.s]||[0,0];by[q.s][1]++;if(picks[q.id]===q.answer){by[q.s][0]++;c++}});
  root.innerHTML='<div class="ticket dark"><div class="body"><p>'+esc(P.score)+'</p><div class="big">'+c+'<small> / '+Q.length+'</small></div></div><div class="stub"><span class="n" style="color:#fff">'+Math.round(c/Q.length*100)+'</span><span class="u">%</span></div></div>'+
- '<div class="card lines">'+Object.keys(by).map(function(s){return '<div><div class="line"><span class="tag s'+CODE[s]+'">'+LET[s]+'</span><span class="grow">'+esc(T.sections[s])+'</span><b class="disp">'+by[s][0]+'/'+by[s][1]+'</b></div><div class="bar" style="height:6px;margin:6px 0 0"><i class="b'+CODE[s]+'" style="height:6px;width:'+Math.round(by[s][0]/by[s][1]*100)+'%"></i></div></div>'}).join('')+'</div>'+
+ '<div class="lines">'+Object.keys(by).map(function(s){return '<div class="r'+CODE[s]+'"><div class="line"><span class="tag s'+CODE[s]+'">'+LET[s]+'</span><span class="grow">'+esc(T.sections[s])+'</span><b class="disp">'+by[s][0]+'/'+by[s][1]+'</b></div><div class="bar" style="height:6px;margin:6px 0 0"><i class="b'+CODE[s]+'" style="height:6px;width:'+Math.round(by[s][0]/by[s][1]*100)+'%"></i></div></div>'}).join('')+'</div>'+
  (P.appUrl?'<a class="btn" href="'+P.appUrl+'">'+esc(P.app)+'</a>':'<div class="btn dark">'+esc(P.appSoon)+'</div>')+'<p></p><button class="btn ghost" id="again">'+esc(P.again)+'</button>';
  document.getElementById('again').onclick=function(){intro()};window.scrollTo(0,root.offsetTop-8)}
 intro()})();
