@@ -14,7 +14,7 @@ function speak(lines,btn){var lab=btn.querySelector('.l'),dot=btn.querySelector(
 function intro(){var by={};Q.forEach(function(q){by[q.s]=(by[q.s]||0)+1});
  root.innerHTML='<div class="ticket"><div class="body"><h2>'+esc(P.start)+'</h2><p>'+esc(P.minutes)+'</p></div><div class="stub"><span class="n">'+Q.length+'</span><span class="u" lang="ja">問</span></div></div>'+
  '<p>'+esc(T.mockIntro)+'</p><div class="lines">'+Object.keys(by).map(function(s){return '<div class="line r'+CODE[s]+'"><span class="tag s'+CODE[s]+'">'+LET[s]+'</span><span class="grow">'+esc(T.sections[s])+'</span><b class="disp">'+by[s]+'</b></div>'}).join('')+'</div>'+
- '<button class="btn" id="go">'+esc(P.start)+'</button><p class="note">'+esc(P.voice)+'</p>'+(P.playUrl?'<a class="btn ghost" href="'+P.playUrl+'">'+esc(P.android)+'</a>':'');
+ '<button class="btn" id="go">'+esc(P.start)+'</button><p class="note">'+esc(P.voice)+'</p>'+appBlock(true);
  document.getElementById('go').onclick=function(){i=0;picks={};show()}}
 function show(){var q=Q[i],ins=I[q.type]||{};var picked=picks[q.id],c=CODE[q.s];
  var html='<div class="top"><span class="c'+c+'" style="font-weight:700">'+esc(T.sections[q.s])+'</span><span class="disp">'+(i+1)+'<span style="color:var(--faint);font-size:15px">/'+Q.length+'</span></span></div><div class="bar"><i class="b'+c+'" style="width:'+Math.round((i+(picked!=null?1:0))/Q.length*100)+'%"></i></div>'+
@@ -27,9 +27,14 @@ function show(){var q=Q[i],ins=I[q.type]||{};var picked=picks[q.id],c=CODE[q.s];
  var pb=document.getElementById('play');if(pb)pb.onclick=function(){if(pb.querySelector('.dot').textContent==='■'){speechSynthesis.cancel();pb.querySelector('.dot').textContent='▶';pb.querySelector('.l').textContent=T.play}else speak(q.audio,pb)};
  [].forEach.call(root.querySelectorAll('.choice'),function(b){b.onclick=function(){picks[q.id]=+b.getAttribute('data-k');show()}});
  var nb=document.getElementById('next');if(nb)nb.onclick=function(){if('speechSynthesis' in window)speechSynthesis.cancel();i++;if(i<Q.length){show();window.scrollTo(0,root.offsetTop-8)}else done()}}
+// パソコンでは QR（スマホで入れて、その場で開く）。スマホではボタン＋「入れたら Open」の一言
+function onPhone(){return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)}
+function appBlock(ghost){if(!P.playUrl)return '';
+ if(!onPhone()&&P.qr)return '<div class="handoff"><div class="qr" role="img" aria-label="QR: Google Play">'+P.qr+'</div><div><b>'+esc(P.phone)+'</b><p>'+esc(P.scan)+'</p></div></div>';
+ return '<a class="btn'+(ghost?' ghost':'')+'" href="'+P.playUrl+'">'+esc(P.android)+'</a><p class="hint">'+esc(P.open)+'</p>'}
 function done(){var by={},c=0;Q.forEach(function(q){by[q.s]=by[q.s]||[0,0];by[q.s][1]++;if(picks[q.id]===q.answer){by[q.s][0]++;c++}});
  root.innerHTML='<div class="ticket dark"><div class="body"><p>'+esc(P.score)+'</p><div class="big">'+c+'<small> / '+Q.length+'</small></div></div><div class="stub"><span class="n" style="color:#fff">'+Math.round(c/Q.length*100)+'</span><span class="u">%</span></div></div>'+
  '<div class="lines">'+Object.keys(by).map(function(s){return '<div class="r'+CODE[s]+'"><div class="line"><span class="tag s'+CODE[s]+'">'+LET[s]+'</span><span class="grow">'+esc(T.sections[s])+'</span><b class="disp">'+by[s][0]+'/'+by[s][1]+'</b></div><div class="bar" style="height:6px;margin:6px 0 0"><i class="b'+CODE[s]+'" style="height:6px;width:'+Math.round(by[s][0]/by[s][1]*100)+'%"></i></div></div>'}).join('')+'</div>'+
- (P.playUrl?'<a class="btn" href="'+P.playUrl+'">'+esc(P.android)+'</a><p></p>':'')+(P.appUrl?'<a class="btn" href="'+P.appUrl+'">'+esc(P.app)+'</a>':'<div class="btn dark">'+esc(P.appSoon)+'</div>')+'<p></p><button class="btn ghost" id="again">'+esc(P.again)+'</button>';
+ (function(){var w=null,r=2;Object.keys(by).forEach(function(s){var x=by[s][0]/by[s][1];if(x<r){r=x;w=s}});return w&&r<1?'<div class="weak">'+esc(P.weak.replace('{s}',T.sections[w]))+'</div>':''})()+appBlock(false)+'<p></p>'+(P.appUrl?'<a class="btn" href="'+P.appUrl+'">'+esc(P.app)+'</a>':'<div class="btn dark">'+esc(P.appSoon)+'</div>')+'<p></p><button class="btn ghost" id="again">'+esc(P.again)+'</button>';
  document.getElementById('again').onclick=function(){intro()};window.scrollTo(0,root.offsetTop-8)}
 intro()})();
