@@ -3,8 +3,8 @@ var L=document.documentElement.getAttribute('data-lang'),Q=window.A2_Q,T=window.
 var CODE={moji:'m',kaiwa:'k',choukai:'c',dokkai:'d'},LET={moji:'M',kaiwa:'K',choukai:'C',dokkai:'D'};
 var root=document.getElementById('app'),i=0,picks={};
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-// 1〜2字だけ次の行に落ちないよう、日本語は最後の4字を見えない字（U+2060）でつなぐ。数字と後ろの日本語も離さない
-function nob(s){s=String(s).replace(/([0-9])(?=[぀-ヿ㐀-鿿])/g,'$1⁠');var a=Array.from(s),k=a.length-1;if(k>3&&/[　-ヿ㐀-鿿＀-￯]/.test(a[k])){return a.slice(0,k-3).join('')+a.slice(k-3).join('⁠')}return s.replace(/ (S{1,12})$/,' $1')}
+// 1〜2字だけ次の行に落ちないよう、日本語は最後の4字を見えない字（U+2060）でつなぐ。数字と後ろの日本語も離さない。ミャンマー語は最後の3音節をつなぐ（src/logic/wrap.ts と同じ考え）
+function nob(s){s=String(s).replace(/([0-9])(?=[぀-ヿ㐀-鿿])/g,'$1⁠');var a=Array.from(s),k=a.length-1;if(k>3&&/[　-ヿ㐀-鿿＀-￯]/.test(a[k])){return a.slice(0,k-3).join('')+a.slice(k-3).join('⁠')}if(k>0&&/[\u1000-\u109F]/.test(a[k])){var st=k;while(st>0&&/[\u1000-\u109F]/.test(a[st-1]))st--;var p=[];for(var j=st+1;j<=k;j++)if(/[\u1000-\u102A\u103F\u104C-\u104F]/.test(a[j])&&a[j-1]!=='\u1039'&&a[j+1]!=='\u103A'&&a[j+1]!=='\u1039')p.push(j);p.slice(-2).reverse().forEach(function(j){a.splice(j,0,'\u2060')});s=a.join('')}return s.replace(/ (S{1,12})$/,' $1')}
 function tag(s,n){return '<span class="tag tagL s'+CODE[s]+'"><small>'+LET[s]+'</small><span>'+n+'</span></span>'}
 function speak(lines,btn){var lab=btn.querySelector('.l'),dot=btn.querySelector('.dot');if(!('speechSynthesis' in window)){lab.textContent='—';return}
  speechSynthesis.cancel();var k=0;lab.textContent=T.playing;dot.textContent='■';

@@ -6,9 +6,9 @@
 [lang=ja],.q,.passage,.choice .t,.ins{font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Noto Sans JP","Yu Gothic UI",Meiryo,sans-serif}
 .disp{font-family:Rajdhani,Mukta,sans-serif;font-weight:700}
 .board{background:var(--board);color:#fff}.board .in{max-width:640px;margin:0 auto;padding:18px 16px 22px}
-header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}header .brand{font-family:Rajdhani,sans-serif;font-weight:700;font-size:28px;line-height:1;flex:1;min-width:0;color:#fff;text-decoration:none}
+header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}header .brand{font-family:Rajdhani,sans-serif;font-weight:700;font-size:28px;line-height:1;flex:1 0 auto;white-space:nowrap;color:#fff;text-decoration:none}
 nav.langs{display:flex;gap:4px}
-nav.langs a{padding:5px 10px;border-radius:6px;color:var(--boardSoft);text-decoration:none;font-size:14px;font-weight:500;white-space:nowrap;border:1.5px solid #2C4570}nav.langs a.on{background:#fff;color:#13294B;border-color:#fff}
+nav.langs a{padding:5px 8px;border-radius:6px;color:var(--boardSoft);text-decoration:none;font-size:14px;font-weight:500;white-space:nowrap;border:1.5px solid #2C4570}nav.langs a.on{background:#fff;color:#13294B;border-color:#fff}
 h1{font-family:Rajdhani,Mukta,sans-serif;font-weight:700;font-size:32px;line-height:1.15;margin:22px 0 8px;text-wrap:balance}.lead{color:var(--boardSoft);margin:0}
 .strip{display:flex;align-items:center;gap:3px;margin-top:18px}.strip i{flex:1;height:8px;background:var(--m)}.strip i:nth-child(2){background:var(--k)}.strip i:nth-child(3){background:var(--c)}.strip i:nth-child(4){background:var(--d)}
 .strip b{width:18px;height:18px;border-radius:50%;border:4px solid var(--signal);margin-left:3px;flex:none}
